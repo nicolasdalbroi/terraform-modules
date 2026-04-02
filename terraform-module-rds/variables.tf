@@ -30,7 +30,7 @@ variable "primary_cluster_name" {
 }
 
 variable "secondary_cluster_name" {
-  type = string
+  type    = string
   default = ""
 }
 
@@ -57,7 +57,7 @@ variable "primary_database_subnet" {
 }
 
 variable "secondary_database_subnet" {
-  type = string
+  type    = string
   default = ""
 }
 
@@ -88,18 +88,25 @@ variable "primary_cluster_instance_name" {
 }
 
 variable "secondary_cluster_instance_name" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "iam_database_authentication_enabled" {
-    type = bool  
-    default = false
-    description = "Enable or disable IAM authentication to RDS cluster"
+  type        = bool
+  default     = false
+  description = "Enable or disable IAM authentication to RDS cluster"
 }
 
 variable "iam_roles" {
-    type = list(string)
-    default = []
-    description = "If IAM authentication is enabled provide a list of IAM roles"
+  type        = list(string)
+  default     = []
+  description = "If IAM authentication is enabled provide a list of IAM roles"
+}
+
+variable "master_password_override" {
+  type        = string
+  default     = null
+  sensitive   = true
+  description = "Used for testing only. In production leave this null."
 }

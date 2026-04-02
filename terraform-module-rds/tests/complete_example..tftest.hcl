@@ -1,27 +1,43 @@
-provider "aws" {
-  region = "us-east-1"
+mock_provider "aws" {
+  mock_resource "aws_secretsmanager_secret_version" {
+    defaults = {
+      secret_string_wo         = "mock-password"
+      secret_string_wo_version = 1
+    }
+  }
+
+  mock_resource "aws_rds_cluster" {
+    defaults = {
+      master_password_wo         = "mock-password"
+      master_password_wo_version = 1
+    }
+  }
 }
 
-provider "aws" {
-  region = "us-west-1"
+mock_provider "aws" {
   alias = "secondary"
 }
 
 variables {
-  primary_cluster_name            = "test-primary"
-  primary_cluster_instance_name   = "test-instance"
-  secondary_cluster_name          = "test-secondary"
-  secondary_cluster_instance_name = "test-secondary-instance"
-  database_username               = "admin"
-  cluster_engine                  = "aurora-postgresql"
-  cluster_engine_version          = "15.4"
-  primary_database_subnet         = "test-subnet"
-  secondary_database_subnet       = "test-secondary-subnet"
-  rds_instance_class              = "db.t3.medium"
-  primary_instance_count          = 2
-  secondary_instance_count        = 1
+  create_global_cluster               = true
+  global_cluster_identifier           = "global-cluster"
+  global_engine               = "aurora-postgresql"
+  master_password_override            = "mock-password"
+  primary_cluster_name                = "test-primary"
+  primary_cluster_instance_name       = "test-instance"
+  secondary_cluster_name              = "test-secondary"
+  secondary_cluster_instance_name     = "test-secondary-instance"
+  database_username                   = "admin"
+  cluster_engine                      = "aurora-postgresql"
+  cluster_engine_version              = "15.4"
+  primary_database_subnet             = "test-subnet"
+  secondary_database_subnet           = "test-secondary-subnet"
+  rds_instance_class                  = "db.t3.medium"
+  primary_instance_count              = 2
+  secondary_cluster_enabled = true
+  secondary_instance_count            = 1
   iam_database_authentication_enabled = false
-  iam_roles                       = []
+  iam_roles                           = []
 }
 
 run "global_cluster_created" {

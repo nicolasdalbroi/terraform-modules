@@ -1,20 +1,37 @@
-provider "aws" {
-  region = "us-east-1"
+mock_provider "aws" {
+  mock_resource "aws_secretsmanager_secret_version" {
+    defaults = {
+      secret_string_wo         = "mock-password"
+      secret_string_wo_version = 1
+    }
+  }
+
+  mock_resource "aws_rds_cluster" {
+    defaults = {
+      master_password_wo         = "mock-password"
+      master_password_wo_version = 1
+    }
+  }
+}
+
+mock_provider "aws" {
+  alias = "secondary"
 }
 
 variables {
-  primary_cluster_name            = "test-primary"
-  primary_cluster_instance_name   = "test-instance"
-  database_username               = "admin"
-  cluster_engine                  = "aurora-postgresql"
-  cluster_engine_version          = "15.4"
-  primary_database_subnet         = "test-subnet"  
-  rds_instance_class              = "db.t3.medium"
-  primary_instance_count          = 1
+  master_password_override      = "mock-password"
+  primary_cluster_name          = "test-primary"
+  primary_cluster_instance_name = "test-instance"
+  database_username             = "admin"
+  cluster_engine                = "aurora-postgresql"
+  cluster_engine_version        = "15.4"
+  primary_database_subnet       = "test-subnet"
+  rds_instance_class            = "db.t3.medium"
+  primary_instance_count        = 1
 }
 
 run "no_global_cluster_by_default" {
-  command = plan  # unit test — no real resources created
+  command = plan # unit test — no real resources created
 
   assert {
     condition     = length(aws_rds_global_cluster.global_cluster) == 0
