@@ -88,3 +88,13 @@ variable "primary_cluster_instance_name" {
 variable "secondary_cluster_instance_name" {
   type = string
 }
+
+variable "iam_database_authentication_enabled" {
+    type = bool  
+    description = "Enable or disable IAM authentication to RDS cluster"
+}
+
+variable "iam_roles" {
+    type = list(string)
+    description = "If IAM authentication is enabled provide a list of IAM roles"
+}

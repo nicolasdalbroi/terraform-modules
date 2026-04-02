@@ -34,6 +34,8 @@ resource "aws_rds_cluster" "primary_cluster" {
   master_password_wo          = aws_secretsmanager_secret_version.db_password.secret_string_wo
   master_password_wo_version  = aws_secretsmanager_secret_version.db_password.secret_string_wo_version
   db_subnet_group_name        = var.primary_database_subnet
+  iam_database_authentication_enabled = var.iam_database_authentication_enabled  
+  iam_roles = var.iam_database_authentication_enabled == true ? var.iam_roles : ""
   lifecycle {
     create_before_destroy = true
   }
@@ -62,6 +64,8 @@ resource "aws_rds_cluster" "secondary" {
   global_cluster_identifier = aws_rds_global_cluster.global_cluster[0].id
   skip_final_snapshot       = true
   db_subnet_group_name      = var.secondary_database_subnet
+  iam_database_authentication_enabled = var.iam_database_authentication_enabled  
+  iam_roles = var.iam_database_authentication_enabled == true ? var.iam_roles : ""
 
   lifecycle {
     create_before_destroy = true
