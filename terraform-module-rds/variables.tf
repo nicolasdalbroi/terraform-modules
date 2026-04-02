@@ -29,6 +29,11 @@ variable "primary_cluster_name" {
   type = string
 }
 
+variable "secondary_cluster_name" {
+  type = string
+}
+
+
 variable "database_username" {
   type = string
 }

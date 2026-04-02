@@ -58,8 +58,8 @@ resource "aws_rds_cluster" "secondary" {
   provider                  = aws.secondary
   engine                    = aws_rds_global_cluster.global_cluster[0].engine
   engine_version            = aws_rds_global_cluster.global_cluster[0].engine_version
-  cluster_identifier        = "test-secondary-cluster"
-  global_cluster_identifier = aws_rds_global_cluster.global_cluster[0].cluster_identifier
+  cluster_identifier        = var.secondary_cluster_name
+  global_cluster_identifier = aws_rds_global_cluster.global_cluster[0].id
   skip_final_snapshot       = true
   db_subnet_group_name      = var.secondary_database_subnet
 
@@ -81,7 +81,7 @@ resource "aws_rds_cluster_instance" "secondary_cluster_instance" {
   engine             = aws_rds_global_cluster.global_cluster[0].engine
   engine_version     = aws_rds_global_cluster.global_cluster[0].engine_version
   instance_class     = var.rds_instance_class
-  cluster_identifier = aws_rds_cluster.secondary.cluster_identifier
+  cluster_identifier = aws_rds_cluster.secondary[0].cluster_identifier
   lifecycle {
     create_before_destroy = true
   }
