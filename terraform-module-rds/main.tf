@@ -58,10 +58,10 @@ resource "aws_rds_cluster_instance" "primary_instance" {
 resource "aws_rds_cluster" "secondary" {
   count                     = var.secondary_cluster_enabled == true ? 1 : 0
   provider                  = aws.secondary
-  engine                    = aws_rds_global_cluster.global_cluster[0].engine
-  engine_version            = aws_rds_global_cluster.global_cluster[0].engine_version
+  engine                    = aws_rds_cluster.primary_cluster.engine
+  engine_version            = aws_rds_cluster.primary_cluster.engine_version
   cluster_identifier        = var.secondary_cluster_name
-  global_cluster_identifier = aws_rds_global_cluster.global_cluster[0].id
+  global_cluster_identifier = var.create_global_cluster == true ? aws_rds_global_cluster.global_cluster[0].id : ""
   skip_final_snapshot       = true
   db_subnet_group_name      = var.secondary_database_subnet
   iam_database_authentication_enabled = var.iam_database_authentication_enabled  
@@ -80,10 +80,11 @@ resource "aws_rds_cluster" "secondary" {
 }
 
 resource "aws_rds_cluster_instance" "secondary_cluster_instance" {
+  provider = aws.secondary
   count              = var.secondary_instance_count
   identifier         = "${var.secondary_cluster_instance_name}-${count.index}"
-  engine             = aws_rds_global_cluster.global_cluster[0].engine
-  engine_version     = aws_rds_global_cluster.global_cluster[0].engine_version
+  engine             = aws_rds_cluster.primary_cluster.engine
+  engine_version     = aws_rds_cluster.primary_cluster.engine_version
   instance_class     = var.rds_instance_class
   cluster_identifier = aws_rds_cluster.secondary[0].cluster_identifier
   lifecycle {
