@@ -81,7 +81,7 @@ resource "aws_rds_cluster" "secondary" {
 
 resource "aws_rds_cluster_instance" "secondary_cluster_instance" {
   provider = aws.secondary
-  count              = var.secondary_instance_count
+  count    = var.secondary_cluster_enabled ? var.secondary_instance_count : 0
   identifier         = "${var.secondary_cluster_instance_name}-${count.index}"
   engine             = aws_rds_cluster.primary_cluster.engine
   engine_version     = aws_rds_cluster.primary_cluster.engine_version

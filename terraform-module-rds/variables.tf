@@ -31,6 +31,7 @@ variable "primary_cluster_name" {
 
 variable "secondary_cluster_name" {
   type = string
+  default = ""
 }
 
 
@@ -48,7 +49,7 @@ variable "cluster_engine_version" {
 
 variable "rds_instance_class" {
   type    = string
-  default = "t3.micro"
+  default = "db.t3.medium"
 }
 
 variable "primary_database_subnet" {
@@ -57,6 +58,7 @@ variable "primary_database_subnet" {
 
 variable "secondary_database_subnet" {
   type = string
+  default = ""
 }
 
 variable "public_access" {
@@ -87,14 +89,17 @@ variable "primary_cluster_instance_name" {
 
 variable "secondary_cluster_instance_name" {
   type = string
+  default = ""
 }
 
 variable "iam_database_authentication_enabled" {
     type = bool  
+    default = false
     description = "Enable or disable IAM authentication to RDS cluster"
 }
 
 variable "iam_roles" {
     type = list(string)
+    default = []
     description = "If IAM authentication is enabled provide a list of IAM roles"
 }
