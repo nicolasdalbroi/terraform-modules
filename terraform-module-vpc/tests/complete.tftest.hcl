@@ -6,6 +6,7 @@
 mock_provider "aws" {}
 
 variables {
+  region = "us-east-1"
   name           = "test-complete"
   vpc_cidr_block = "10.0.0.0/16"
 
