@@ -1,7 +1,7 @@
 variable "create_global_cluster" {
   type        = bool
   default     = false
-  description = "Boolean value to determine wheter to create a global cluster"
+  description = "Boolean value to determine whether to create a global cluster"
 }
 
 variable "global_cluster_identifier" {
@@ -34,7 +34,6 @@ variable "secondary_cluster_name" {
   default = ""
 }
 
-
 variable "database_username" {
   type = string
 }
@@ -52,20 +51,24 @@ variable "rds_instance_class" {
   default = "db.t3.medium"
 }
 
-variable "primary_database_subnet" {
-  type = string
+# Replaced primary_database_subnet (string) with subnet_ids (list)
+# The module now creates the aws_db_subnet_group internally
+variable "subnet_ids" {
+  description = "List of subnet IDs for the primary DB subnet group (use database subnets)"
+  type        = list(string)
 }
 
-variable "secondary_database_subnet" {
-  type    = string
-  default = ""
+# Replaced secondary_database_subnet (string) with secondary_subnet_ids (list)
+variable "secondary_subnet_ids" {
+  description = "List of subnet IDs for the secondary DB subnet group"
+  type        = list(string)
+  default     = []
 }
 
 variable "public_access" {
   type        = bool
   default     = false
   description = "Optional boolean to enable public endpoint for cluster instance"
-
 }
 
 variable "secondary_cluster_enabled" {
@@ -109,4 +112,10 @@ variable "master_password_override" {
   default     = null
   sensitive   = true
   description = "Used for testing only. In production leave this null."
+}
+
+variable "tags" {
+  description = "Tags to apply to all resources"
+  type        = map(string)
+  default     = {}
 }
